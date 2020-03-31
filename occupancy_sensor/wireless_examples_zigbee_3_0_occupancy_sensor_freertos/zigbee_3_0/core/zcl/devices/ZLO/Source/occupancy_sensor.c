@@ -17,6 +17,7 @@
 #include <string.h>
 #include "zps_apl.h"
 #include "zcl_heap.h"
+#include "AliIotSecurity.h"
 #include "occupancy_sensor.h"
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
@@ -174,6 +175,19 @@ PUBLIC teZCL_Status eZLO_RegisterOccupancySensorEndPoint(uint8 u8EndPointIdentif
             return E_ZCL_FAIL;
         }
     #endif
+#if (defined CLD_ALIIOTSECURITY) && (defined ALIIOTSECURITY_SERVER)
+	/* Create an instance of a On/Off cluster as a server */
+	if(eCLD_AliIotSecurityCreateAliIotSecurity(&psDeviceInfo->sClusterInstance.sAliIotSecurityServer,
+		TRUE,
+		&sCLD_AliIotSecurity,
+		&psDeviceInfo->sAliIotSecurityServerCluster,
+		&au8AliIotSecurityAttributeControlBits[0],
+		NULL) != E_ZCL_SUCCESS)
+	{
+		// Need to convert from cluster specific to ZCL return type so we lose the extra information of the return code
+		return E_ZCL_FAIL;
+	}
+#endif
 
     return eZCL_Register(&psDeviceInfo->sEndPoint);
 }

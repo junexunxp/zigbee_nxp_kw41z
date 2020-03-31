@@ -115,7 +115,9 @@ typedef struct
     /* Add  cluster instance for the OTA cluster */
     tsZCL_ClusterInstance sOTAClient;
 #endif
-
+#if (defined CLD_ALIIOTSECURITY) && (defined ALIIOTSECURITY_SERVER)
+	tsZCL_ClusterInstance sAliIotSecurityServer;
+#endif
 } tsZLO_OccupancySensorDeviceClusterInstances __attribute__ ((aligned(4)));
 #endif
 
@@ -174,7 +176,9 @@ typedef struct
     tsCLD_AS_Ota sCLD_OTA;
     tsOTA_Common sCLD_OTA_CustomDataStruct;
 #endif
-
+#if (defined CLD_ALIIOTSECURITY) && (defined ALIIOTSECURITY_SERVER)
+	tsCLD_AliIotSecurity sAliIotSecurityServerCluster;
+#endif
 } tsZLO_OccupancySensorDevice;
 
 
