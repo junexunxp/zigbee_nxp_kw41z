@@ -1,0 +1,28 @@
+1. Copy source/aliiot_sec folder to your application's source folder
+
+2. Add include dependency of .h files in 'aliiot_sec' folder
+
+3. In device cluster instances structers for example in file 'dimmable_light.h' file 'tsZLO_DimmableLightDeviceClusterInstances add below
+	#if (defined CLD_ALIIOTSECURITY) && (defined ALIIOTSECURITY_SERVER)
+        tsZCL_ClusterInstance sAliIotSecurityServer;
+	#endif
+
+4. In same file as step 3, add below to structure tsZLO_DimmableLightDevice
+	#if (defined CLD_ALIIOTSECURITY) && (defined ALIIOTSECURITY_SERVER)
+        tsCLD_AliIotSecurity sAliIotSecurityServerCluster;
+	#endif
+	
+5. In register end point API such as 'eZLO_RegisterDimmableLightEndPoint' add below
+	#if (defined CLD_ALIIOTSECURITY) && (defined ALIIOTSECURITY_SERVER)
+        /* Create an instance of a On/Off cluster as a server */
+        if(eCLD_AliIotSecurityCreateAliIotSecurity(&psDeviceInfo->sClusterInstance.sAliIotSecurityServer,
+			TRUE,
+			&sCLD_AliIotSecurity,
+			&psDeviceInfo->sAliIotSecurityServerCluster,
+			&au8AliIotSecurityAttributeControlBits[0],
+			NULL) != E_ZCL_SUCCESS)
+        {
+        	// Need to convert from cluster specific to ZCL return type so we lose the extra information of the return code
+        	return E_ZCL_FAIL;
+        }
+    #endif
